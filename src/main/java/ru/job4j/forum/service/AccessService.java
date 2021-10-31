@@ -13,7 +13,7 @@ public class AccessService {
     }
 
     public void saveUser(User user) {
-        userStore.addNewUser(user);
+        userStore.save(user);
     }
 
     public User verifyUser(User user) {

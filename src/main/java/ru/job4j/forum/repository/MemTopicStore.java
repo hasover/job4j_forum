@@ -8,28 +8,38 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
 public class MemTopicStore implements TopicStore {
     private Map<Integer, Topic> topics = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger();
 
-    public Collection<Topic> getAllTopics() {
+    public Collection<Topic> findAll() {
         return topics.values();
     }
 
-    public void saveTopic(Topic topic) {
+    @Override
+    public Topic save(Topic topic) {
+        if (topic.getId() == 0) {
+            return saveTopic(topic);
+        } else {
+            return updateTopic(topic);
+        }
+    }
+
+    private Topic saveTopic(Topic topic) {
         int id = counter.incrementAndGet();
         topic.setId(id);
         topics.put(id, topic);
+        return topic;
     }
 
-    public void updateTopic(Topic topic) {
+    private Topic updateTopic(Topic topic) {
        Topic topicInStore = topics.get(topic.getId());
        topicInStore.setDescription(topic.getDescription());
        topicInStore.setName(topic.getName());
+       return topic;
     }
 
-    public Topic getTopicById(int id) {
+    public Topic findById(int id) {
         return topics.get(id);
     }
 

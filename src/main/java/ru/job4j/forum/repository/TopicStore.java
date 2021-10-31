@@ -5,11 +5,9 @@ import ru.job4j.forum.model.Topic;
 import java.util.Collection;
 
 public interface TopicStore {
-    Collection<Topic> getAllTopics();
+    Collection<Topic> findAll();
 
-    void saveTopic(Topic topic);
+    Topic save(Topic topic);
 
-    void updateTopic(Topic topic);
-
-    Topic getTopicById(int id);
+    Topic findById(int id);
 }

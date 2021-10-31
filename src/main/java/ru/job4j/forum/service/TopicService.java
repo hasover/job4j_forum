@@ -1,6 +1,7 @@
 package ru.job4j.forum.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.forum.model.Post;
 import ru.job4j.forum.model.Topic;
 import ru.job4j.forum.repository.TopicStore;
@@ -15,22 +16,19 @@ public class TopicService {
     }
 
     public void saveOrUpdateTopic(Topic topic) {
-       if (topic.getId() == 0) {
-           topicStore.saveTopic(topic);
-       } else {
-           topicStore.updateTopic(topic);
-       }
+       topicStore.save(topic);
     }
 
     public Collection<Topic> getAllTopics() {
-        return topicStore.getAllTopics();
+        return topicStore.findAll();
     }
 
     public Topic getTopicById(int id) {
-        return topicStore.getTopicById(id);
+        return topicStore.findById(id);
     }
 
+    @Transactional
     public void addPostToTopic(Post post, int topicId) {
-        topicStore.getTopicById(topicId).addPost(post);
+        topicStore.findById(topicId).addPost(post);
     }
 }

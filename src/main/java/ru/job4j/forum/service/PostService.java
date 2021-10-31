@@ -18,18 +18,14 @@ public class PostService {
     }
 
     public Collection<Post> getAllTopicPosts(int topicId) {
-        return topicStore.getTopicById(topicId).getPosts();
+        return topicStore.findById(topicId).getPosts();
     }
 
     public void saveOrUpdatePost(Post post) {
-        if (post.getId() == 0) {
-            postStore.savePost(post);
-        } else {
-            postStore.updatePost(post);
-        }
+        postStore.save(post);
     }
 
     public Post getPostById(int id) {
-        return postStore.getPostById(id);
+        return postStore.findById(id);
     }
 }
