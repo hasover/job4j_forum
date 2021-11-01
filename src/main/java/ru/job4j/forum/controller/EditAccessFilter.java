@@ -1,8 +1,10 @@
 package ru.job4j.forum.controller;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import ru.job4j.forum.model.User;
+import ru.job4j.forum.service.AccessService;
 import ru.job4j.forum.service.PostService;
 import ru.job4j.forum.service.TopicService;
 
@@ -16,10 +18,13 @@ import java.io.IOException;
 public class EditAccessFilter implements Filter {
     private TopicService topicService;
     private PostService postService;
+    private AccessService accessService;
 
-    public EditAccessFilter(TopicService topicService, PostService postService) {
+    public EditAccessFilter(TopicService topicService, PostService postService,
+                            AccessService accessService) {
         this.topicService = topicService;
         this.postService = postService;
+        this.accessService = accessService;
     }
 
     @Override
@@ -34,8 +39,8 @@ public class EditAccessFilter implements Filter {
             String strId = servletRequest.getParameter("id");
             if (strId != null) {
                 int id = Integer.parseInt(servletRequest.getParameter("id"));
-                User sessionUser = (User) req.getSession().getAttribute("user");
-
+                User sessionUser = accessService.findUserByUsername(
+                        SecurityContextHolder.getContext().getAuthentication().getName());
                 if (uri.endsWith("topic")) {
                     if (!topicService.getTopicById(id).getUser().equals(sessionUser)) {
                         resp.sendRedirect(".");

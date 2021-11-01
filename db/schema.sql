@@ -2,8 +2,15 @@ create table users (
     id serial primary key,
     username varchar(100) unique ,
     password varchar(100),
-    enabled boolean  default true
+    enabled boolean  default true,
+    authority_id int not null references authorities(id)
 );
+CREATE TABLE authorities (
+    id serial primary key,
+    authority VARCHAR(50) NOT NULL unique
+);
+insert into authorities (authority) values ('ROLE_USER');
+insert into authorities (authority) values ('ROLE_ADMIN');
 
 create table topics(
     id serial primary key,

@@ -1,15 +1,19 @@
 package ru.job4j.forum.service;
 
 import org.springframework.stereotype.Service;
+import ru.job4j.forum.model.Authority;
 import ru.job4j.forum.model.User;
+import ru.job4j.forum.repository.AuthorityStore;
 import ru.job4j.forum.repository.UserStore;
 
 @Service
 public class AccessService {
     private UserStore userStore;
+    private AuthorityStore authorityStore;
 
-    public AccessService(UserStore userStore) {
+    public AccessService(UserStore userStore, AuthorityStore authorityStore) {
         this.userStore = userStore;
+        this.authorityStore = authorityStore;
     }
 
     public void saveUser(User user) {
@@ -25,5 +29,13 @@ public class AccessService {
             throw new IllegalArgumentException("Неверный пароль.");
         }
         return userInStore;
+    }
+
+    public User findUserByUsername(String userName) {
+        return userStore.findUserByUsername(userName);
+    }
+
+    public Authority findByAuthority(String authority) {
+        return authorityStore.findByAuthority(authority);
     }
 }
